@@ -1,0 +1,230 @@
+@font-face {
+  font-family: Vazir;
+  src: url('./font/Vazir.eot');
+  src: url('./font/Vazir.eot?#iefix') format('Vazir-opentype'),
+       url('./font/Vazir.woff') format('woff'),
+       url('./font/Vazir.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (max-width: 768px) {
+  .companyName {
+      margin-top: 20px;
+      font-size: 30px;
+  }
+  .box {
+    margin:5px 5px 5px 5px;
+  }
+  .col- {
+    width: 100%;
+  }
+}
+
+.container {
+  direction: rtl;
+  font-family: 'Vazir';
+  margin-top:20px;
+}
+
+.companyName {
+    margin-top:15px;
+    float:right;
+    font-family: 'Vazir';
+    font-weight: 1000;
+}
+
+.logo {
+    float:left;
+}
+/* 
+.nav {
+    font-family: 'Vazir';
+    margin-bottom: 15px !important;
+}
+
+.nav-item {
+    width:25%;
+    text-align:center;
+}
+
+#dashboard {
+    margin: 0 auto;
+} */
+
+.box {
+    text-align:center;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 0 auto;
+    margin:5px 5px 25px 5px;
+}
+
+.topic {
+  text-align: center;
+}
+
+.hr-line {
+  border: 0.5px dashed #17a2b8;
+}
+
+#room-lamp {
+    text-align: center;
+    padding:10px;
+}
+
+#room_bedsideLamp {
+  text-align: center;
+  /* padding:10px; */
+}
+
+#sensor-text {
+  text-align: center;
+  padding:10px;
+}
+
+#icon {
+  margin-bottom: 15px !important;
+  text-align: center !important;
+  font-size: 230%;
+}
+
+.sensor-data {
+  margin-top: 10px;
+  margin-bottom: 15px !important;
+  text-align: center;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    /* margin: 0 auto; */
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+    width: 39px;
+    height: 19px;
+    }
+    
+/* Hide default HTML checkbox */
+.switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+
+/* The slider */
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 15px;
+width: 15px;
+left: 2px;
+bottom: 2px;
+background-color: white;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 50px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.tab {
+  overflow: hidden;
+  /* border: 1px solid #ccc; */
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  margin-bottom: 20px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  width: 25%;
+  border-radius: 10px;
+  background-color: inherit;
+  float: right;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ddd;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  /* border: 1px solid #ccc; */
+  border-top: none;
+}
+
+table {
+  width: 100%;
+  margin: auto;
+  padding: auto;
+}
+
+th {
+  font-size: 0.94rem !important;
+  margin: auto;
+  padding: auto;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn-dark {
+  width: 100% !important;
+  line-height: 35px !important;
+}
+
+.first-row {
+  color: #ffb80e;
+  width: 100%;
+}
+
+.rounded {
+  width: 100%;
+}

@@ -1,0 +1,25 @@
+from django.shortcuts import render
+from .models import Place
+
+def home(request):
+    places = Place.objects
+    return render(request, 'index.html',{'places':places})
+
+def submit_form(request):
+    if request.method == 'POST':
+        if request.POST.get('button'):
+            post = Place()
+            post.place = request.POST.get('place')
+            post.device_type = request.POST.get('device_type')
+            post.device = request.POST.get('device')
+            post.unique_id = request.POST.get('unique_id')
+            post.save()
+            return render(request, 'post.html')
+        else:
+            return render(request, 'index.html/admin')
+
+"""
+def place(request):
+    places = Place.objects
+    return render(request, 'index.html/places',{'places':places})
+"""
