@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="description" content="An interactive getting started guide for Brackets.">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <link rel="stylesheet" href="{%static 'style.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lalezar">
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
     integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
@@ -61,8 +61,8 @@
                   <div class="row">
                     <p class="col-md-6" id='{{ place.unique_id }}'>خاموش</p>
                     <div class="col-md-6">
-                      <label class="switch">
-                        <input type="checkbox" onclick="publish('{{ place.unique_id }}')">
+                      <label id="switch{{ place.unique_id }}" class="switch">
+                        <input id="state{{ place.unique_id }}" type="checkbox" onclick="publish('{{ place.unique_id }}')">
                         <span class="slider round"></span>
                       </label>
                     </div>
@@ -181,6 +181,7 @@ function onConnect() {
   //   client.subscribe(topics[i]);
   // }
   // client.subscribe("switch-toggle");
+  client.subscribe("node1");
   alert("Connected.");
 }
 
@@ -198,26 +199,21 @@ function onMessageArrived(message){
   // for (i = 0; i < topics.length; i++) {
   //   document.getElementById(topics[i]).innerHTML = message.payloadString + '&degC';
   // }
-
-  // var str = message.payloadString;
-  // alert(str);
-  // arr = str.split("/");
-  // alert(arr[0]+'/'+arr[1]);
-  // if (arr[1] == '2') {
-  //   $(document).ready(function(){
-  //     var id = arr[0];
-  //     if ($("#id").is(':checked')) {
-  //       $("#id").attr("checked", false);
-  //       alert("toggle off");
-  //       $("#id").click();
-  //     }
-  //     else {
-  //       $("#id").attr("checked", true);
-  //       alert("toggle on");
-  //       $("#id").click();
-  //     }
-  //   });
-  // }
+  
+  var str = message.payloadString;
+  arr = str.split("/");
+  if (arr[1] == '2') {
+    $(document).ready(function(){
+      var id = arr[0];
+        // if($("#state"+id).is(':checked')) {
+        //   $("#state"+id).attr("checked", true);
+        // }
+        // else {
+        //   $("#state"+id).attr("checked", false);
+        // }
+        $("#switch"+id).click();
+    });
+  }
 }
 
 function publish(x) {
@@ -228,16 +224,16 @@ function publish(x) {
   if (status.innerHTML == 'روشن'){
     status.innerHTML = 'خاموش';
     status.style.color = "#00B2F6";
-    var message = new Paho.MQTT.Message(x+'0');
-    message.destinationName = "AMA_PROJECT-lamps";
-    // alert(x+'/0');
+    var message = new Paho.MQTT.Message("0");
+    message.destinationName = "topic1";
+    // alert(x);
     client.send(message);
   } else {
     status.innerHTML = 'روشن';
     status.style.color = "#ffb80e";
-    var message = new Paho.MQTT.Message(x+'1');
-    message.destinationName = "AMA_PROJECT-lamps";
-    // alert(x+'/1');
+    var message = new Paho.MQTT.Message("1");
+    message.destinationName = "topic1";
+    // alert(x);
     client.send(message);
   }
 }
@@ -264,5 +260,5 @@ function add_topic(place, device_type, device) {
   integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
   integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
