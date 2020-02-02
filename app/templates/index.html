@@ -11,9 +11,10 @@
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
     integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
   <title>خانه هوشمند تک بی</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <!-- <script type="text/javascript" src="{%static 'js/javascript.js' %}"></script> -->
   <script src="https://kit.fontawesome.com/5d9e2c6692.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js"></script>
-  <!-- <script type="text/javascript" src="{%static 'js/javascript.js' %}"></script> -->
 </head>
 
 <body>
@@ -29,22 +30,22 @@
     <!-- nav links -->
     <div class="tab">
       <button class="tablinks" onclick="openTab(event, 'dashboard')">داشبورد</button>
-      <button class="tablinks" onclick="openTab(event, 'places')" id="defaultOpen">دستگاه‌ها</button>
+      <button class="tablinks" onclick="openTab(event, 'places')">دستگاه‌ها</button>
       <button class="tablinks" onclick="openTab(event, 'scenarios')">سناریوها</button>
-      <button class="tablinks" onclick="openTab(event, 'messages')">پیام‌ها</button>
+      <button class="tablinks" onclick="openTab(event, 'charts')" id="defaultOpen">نمودارها</button>
     </div>
     <!-- nav contents -->
     <div id="dashboard" class="tabcontent">
       <div class="row">
         {% for place in places.all %}
           {% if place.device_type == 'حسگر' %}
-            <div class="col-lg-3 col-sm-12">
+            <div class="col-lg-3 col-md-6 col-sm-12">
               <div class="box border border-warning">
                 <p class="topic bg-warning border border-warning rounded-top">{{ place.place }} > {{place.device_type}} {{ place.device }}</p>
                 <div class="row">
-                  <i class="col-md-6 {{place.icon_class}}" id="icon"></i>
+                  <i class="col-md-6 col-sm-6 col-6 {{place.icon_class}}" id="icon"></i>
                   <!-- <p class="col-md-6" id="sensor-text"></p> -->
-                  <p class="col-md-6 sensor-data" id='{{place.place}}/{{place.device_type}} {{place.device}}'></p>
+                  <p class="col-md-6 col-sm-6 col-6 sensor-data" id='{{place.place}}/{{place.device_type}} {{place.device}}'></p>
                 </div>
               </div>
             </div>  
@@ -55,12 +56,12 @@
       <div class="row">
         {% for place in places.all %}
           {% if place.device_type == 'عملگر' %}
-            <div class="col-md-3 col-sm-12">
+            <div class="col-lg-3 col-md-3 col-md-6 col-sm-12">
               <div class="box border border-info">
                 <p class="topic bg-info border border-info rounded-top">{{ place.place }} > {{ place.device }}</p>
                   <div class="row">
-                    <p class="col-md-6" id='{{ place.unique_id }}'>خاموش</p>
-                    <div class="col-md-6">
+                    <p class="col-md-6 col-sm-6 col-6" id='{{ place.unique_id }}'>خاموش</p>
+                    <div class="col-md-6 col-sm-6 col-6">
                       <label id="switch{{ place.unique_id }}" class="switch">
                         <input id="state{{ place.unique_id }}" type="checkbox" onclick="publish('{{ place.unique_id }}')">
                         <span class="slider round"></span>
@@ -125,29 +126,43 @@
         </div>
       </div>
     </div>
-    <div id="scenarios" class="tabcontent">Scenarios</div>
-    <div id="messages" class="tabcontent">Messages</div>
+    <div id="scenarios" class="tabcontent">سناریو</div>
+    <div id="charts" class="tabcontent">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card bg-info text-white text-center mb-4">دمای محیط</div>
+          <canvas id="theChart"></canvas>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card bg-warning text-white text-center mb-4">رطوبت</div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card bg-danger text-white text-center mt-4">مصرف انرژی</div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card bg-light text-center mt-4">کیفیت هوا</div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 
 <script>
-  document.getElementById("defaultOpen").click();
-
-  function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+document.getElementById("defaultOpen").click();
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
   }
-</script>
-<script>
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
 //parameters
 var hostname = "mqtt.eclipse.org";
 var port = 80;
@@ -167,20 +182,11 @@ client.connect(
 );
 
 //Called when client connects
-var topics = [];
-{% for topic in places.all %}
-  {% if topic.device_type == 'حسگر' %}
-    topics.push('{{topic.place}}/{{topic.device_type}} {{topic.device}}');
-  {% endif %}
-{% endfor %}
 function onConnect() {
   //Once a connection has been established, make a subscription and send a message
   console.log("onConnect");
-  // var i;
-  // for (i = 0; i < topics.length; i++) {
-  //   client.subscribe(topics[i]);
-  // }
-  // client.subscribe("switch-toggle");
+  client.subscribe("tempSensor");
+  client.subscribe("humSensor");
   client.subscribe("node1");
   alert("Connected.");
 }
@@ -193,14 +199,21 @@ function onConnectionLost(responseObject){
 }
 
 //Called when a message arrives
-function onMessageArrived(message){
+function onMessageArrived(message) {
   console.log("Message arrived: topic=" + message.destinationName + ", message=" + message.payloadString);
-  // var i;
-  // for (i = 0; i < topics.length; i++) {
-  //   document.getElementById(topics[i]).innerHTML = message.payloadString + '&degC';
-  // }
-  
-  var str = message.payloadString;
+  if (message.destinationName == "tempSensor") {
+    document.getElementById("پذیرایی/حسگر دما").innerHTML = message.payloadString + '&degC';
+    var tempData = message.payloadString;
+  }
+  else if (message.destinationName == "humSensor") {
+    document.getElementById("پذیرایی/حسگر رطوبت").innerHTML = message.payloadString;
+    var humData = message.payloadString;
+  }
+  else if (message.destinationName == "node1") {
+    var switchState = message.payloadString;
+  }
+
+  var str = switchState;
   arr = str.split("/");
   if (arr[1] == '2') {
     $(document).ready(function(){
@@ -226,39 +239,52 @@ function publish(x) {
     status.style.color = "#00B2F6";
     var message = new Paho.MQTT.Message("0");
     message.destinationName = "topic1";
-    // alert(x);
     client.send(message);
   } else {
     status.innerHTML = 'روشن';
     status.style.color = "#ffb80e";
     var message = new Paho.MQTT.Message("1");
     message.destinationName = "topic1";
-    // alert(x);
     client.send(message);
   }
 }
 
-function add_topic(place, device_type, device) {
-  if(!client){
-    return;
-  }
-  if(device_type == 'حسگر'){
-    var message = new Paho.MQTT.Message(place+'/'+device);
-    message.destinationName = "add_topic_sen";
-    client.send(message);
-  }
-  else{
-    var message = new Paho.MQTT.Message(place+'/'+device);
-    message.destinationName = "add_topic_act";
-    client.send(message);
-  }
+var ctx = document.getElementById('theChart').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'line',
+
+  // The data for our dataset
+  data: {
+      labels: [],
+      datasets: [{
+          label: 'پذیرایی',
+          backgroundColor: '#B3D9E0',
+          borderColor: '#17A2B8',
+          data: []
+      }]
+  },
+
+  // Configuration options go here
+  options: {}
+});
+
+function drawChart(sensorData) {
+  d = new Date();
+  data.labels.push(d.getFullYear() + '/' + d.getMonth() + '/' + d.getDate() +
+                  '(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ')');
+  data.datasets.forEach(function(dataset) {
+    dataset.data.push(sensorData);
+  });
 }
+drawChart(tempData);
 </script>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
   integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
   integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
   integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </html>
