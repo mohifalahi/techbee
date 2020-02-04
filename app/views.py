@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Place
 
@@ -17,6 +18,15 @@ def submit_form(request):
             return render(request, 'post.html')
         else:
             return render(request, 'index.html/admin')
+
+        Place.objects.create(
+            place = place,
+            device_type = device_type,
+            device = device,
+            unique_id = unique_id
+        )   
+
+        return HttpResponse('')
 
 """
 def place(request):

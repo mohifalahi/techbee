@@ -11,7 +11,10 @@
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
     integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
   <title>خانه هوشمند تک بی</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
+  <script async="" src="{%static 'js/Line%20Chart_files/analytics.js' %}"></script>
+  <script src="{%static 'js/Line%20Chart_files/chart.js' %}"></script>
+  <script src="{%static 'js/Line%20Chart_files/utils.js' %}"></script>
   <!-- <script type="text/javascript" src="{%static 'js/javascript.js' %}"></script> -->
   <script src="https://kit.fontawesome.com/5d9e2c6692.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js"></script>
@@ -79,7 +82,7 @@
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
           <div class="card bg-primary text-white text-center p-2 mb-2">دستگاه جدید</div>
-          <form class="text-center" action="{% url 'post' %}" method='POST'>
+          <form class="text-center" id="device_form" action="{% url 'post' %}" method='POST'>
             {% csrf_token %}
             <table>
               <tr class="first-row">
@@ -89,15 +92,15 @@
                 <th>شناسه</th>
               </tr>
               <tr>
-                <th><input id="place" class="rounded" type="text" name="place"></th>
+                <th><input id="place" class="rounded" type="text" name="place" required></th>
                 <th>
-                  <select id="device_type" class="rounded" type="text" name="device_type">
+                  <select id="device_type" class="rounded" type="text" name="device_type" required>
                     <option value="حسگر">حسگر</option>
                     <option value="عملگر">عملگر</option>
                   </select>
                 </th>
-                <th><input id="device" class="rounded" type="text" name="device"></th>
-                <th><input class="rounded" type="text" name="unique_id"></th>
+                <th><input id="device" class="rounded" type="text" name="device" required></th>
+                <th><input id="unique_id" class="rounded" type="text" name="unique_id" required></th>
               </tr>
             </table>
             <input class="btn-dark rounded mt-2" type="submit" name="button" onclick="add_topic(document.getElementById('place').value,document.getElementById('device_type').value,document.getElementById('device').value)" value="افزودن">
@@ -131,7 +134,7 @@
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12">
           <div class="card bg-info text-white text-center mb-4">دمای محیط</div>
-          <canvas id="theChart"></canvas>
+          <canvas id="chart"></canvas>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
           <div class="card bg-warning text-white text-center mb-4">رطوبت</div>
@@ -147,6 +150,26 @@
   </div>
 </body>
 
+<script type="text/javascript">
+  $.(document).on('submit', '#device_form', function(handler){
+    handler.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: 'post/',
+      data:{
+        place: $('#place').val(),
+        device_type: $('#device_type').val(),
+        device: $('#device').val(),
+        unique_id = $('#unique_id').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      success:function(){
+        alert("Data added.")
+      }
+    });
+  });
+</script>
+  
 <script>
 document.getElementById("defaultOpen").click();
 function openTab(evt, tabName) {
@@ -204,29 +227,30 @@ function onMessageArrived(message) {
   if (message.destinationName == "tempSensor") {
     document.getElementById("پذیرایی/حسگر دما").innerHTML = message.payloadString + '&degC';
     var tempData = message.payloadString;
+    addData(tempData);
   }
-  else if (message.destinationName == "humSensor") {
+  if (message.destinationName == "humSensor") {
     document.getElementById("پذیرایی/حسگر رطوبت").innerHTML = message.payloadString;
     var humData = message.payloadString;
   }
-  else if (message.destinationName == "node1") {
+  if (message.destinationName == "node1") {
     var switchState = message.payloadString;
   }
 
-  var str = switchState;
-  arr = str.split("/");
-  if (arr[1] == '2') {
-    $(document).ready(function(){
-      var id = arr[0];
-        // if($("#state"+id).is(':checked')) {
-        //   $("#state"+id).attr("checked", true);
-        // }
-        // else {
-        //   $("#state"+id).attr("checked", false);
-        // }
-        $("#switch"+id).click();
-    });
-  }
+  // var str = switchState;
+  // arr = str.split("/");
+  // if (arr[1] == '2') {
+  //   $(document).ready(function(){
+  //     var id = arr[0];
+  //       // if($("#state"+id).is(':checked')) {
+  //       //   $("#state"+id).attr("checked", true);
+  //       // }
+  //       // else {
+  //       //   $("#state"+id).attr("checked", false);
+  //       // }
+  //       $("#switch"+id).click();
+  //   });
+  // }
 }
 
 function publish(x) {
@@ -248,38 +272,73 @@ function publish(x) {
     client.send(message);
   }
 }
-
-var ctx = document.getElementById('theChart').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'line',
-
-  // The data for our dataset
-  data: {
-      labels: [],
-      datasets: [{
-          label: 'پذیرایی',
-          backgroundColor: '#B3D9E0',
-          borderColor: '#17A2B8',
-          data: []
-      }]
-  },
-
-  // Configuration options go here
-  options: {}
-});
-
-function drawChart(sensorData) {
-  d = new Date();
-  data.labels.push(d.getFullYear() + '/' + d.getMonth() + '/' + d.getDate() +
-                  '(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ')');
-  data.datasets.forEach(function(dataset) {
-    dataset.data.push(sensorData);
-  });
-}
-drawChart(tempData);
 </script>
+<script>
+var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var config = {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [{
+					label: 'پذیرایی',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: [
+					],
+					fill: false,
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: ''
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'زمان'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'دما'
+						}
+					}]
+				}
+			}
+		};
 
+		window.onload = function() {
+			var ctx = document.getElementById('chart').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+
+		function addData(tempData){
+			d = new Date();
+			if (config.data.datasets.length > 0) {
+				config.data.labels.push(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear() + ' (' + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + ")");
+
+				config.data.datasets.forEach(function(dataset) {
+					dataset.data.push(tempData);
+				});
+
+				window.myLine.update();
+			}
+		}
+</script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
   integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
