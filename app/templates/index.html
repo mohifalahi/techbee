@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
     integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
   <title>خانه هوشمند تک بی</title>
+  <script src="{%static 'js/jquery-2.2.4.min.js' %}"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
   <script async="" src="{%static 'js/Line%20Chart_files/analytics.js' %}"></script>
   <script src="{%static 'js/Line%20Chart_files/chart.js' %}"></script>
@@ -33,9 +34,9 @@
     <!-- nav links -->
     <div class="tab">
       <button class="tablinks" onclick="openTab(event, 'dashboard')">داشبورد</button>
-      <button class="tablinks" onclick="openTab(event, 'places')">دستگاه‌ها</button>
+      <button class="tablinks" onclick="openTab(event, 'places')" id="defaultOpen">دستگاه‌ها</button>
       <button class="tablinks" onclick="openTab(event, 'scenarios')">سناریوها</button>
-      <button class="tablinks" onclick="openTab(event, 'charts')" id="defaultOpen">نمودارها</button>
+      <button class="tablinks" onclick="openTab(event, 'charts')">نمودارها</button>
     </div>
     <!-- nav contents -->
     <div id="dashboard" class="tabcontent">
@@ -151,20 +152,23 @@
 </body>
 
 <script type="text/javascript">
-  $.(document).on('submit', '#device_form', function(handler){
-    handler.preventDefault();
+  $(document).on('submit', '#device_form', function(h){
+    h.preventDefault();
+    console.log("Form submitted.");
+    // AJAX form submission function
     $.ajax({
       type: 'POST',
-      url: 'post/',
+      url: "{% url 'post' %}",
       data:{
         place: $('#place').val(),
         device_type: $('#device_type').val(),
         device: $('#device').val(),
-        unique_id = $('#unique_id').val(),
+        unique_id: $('#unique_id').val(),
         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
       },
+      // handle a success response
       success:function(){
-        alert("Data added.")
+        alert("Data added.");
       }
     });
   });
@@ -211,7 +215,7 @@ function onConnect() {
   client.subscribe("tempSensor");
   client.subscribe("humSensor");
   client.subscribe("node1");
-  alert("Connected.");
+  // alert("Connected.");
 }
 
 //Called when the client loses its connection
