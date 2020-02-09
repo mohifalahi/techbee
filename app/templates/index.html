@@ -215,7 +215,7 @@ function onConnect() {
   console.log("onConnect");
   client.subscribe("tempSensor");
   client.subscribe("humSensor");
-  // client.subscribe("node1");
+  client.subscribe("node1");
   alert("Connected.");
 }
 
@@ -239,25 +239,25 @@ function onMessageArrived(message) {
     var humData = message.payloadString;
     addHumData(humData);
   }
-  // if (message.destinationName == "node1") {
-  //   var switchState = message.payloadString;
-  // }
-
-  // var str = switchState;
-  // arr = str.split("/");
-  // if (arr[1] == '2') {
-  //   $(document).ready(function(){
-  //     var id = arr[0];
-  //       // if($("#state"+id).is(':checked')) {
-  //       //   $("#state"+id).attr("checked", true);
-  //       // }
-  //       // else {
-  //       //   $("#state"+id).attr("checked", false);
-  //       // }
-  //       $("#switch"+id).click();
-  //   });
-  // }
+  else if (message.destinationName == "node1") {
+    var switchState = message.payloadString;
+  }
 }
+
+var str = switchState;
+  arr = str.split("/");
+  if (arr[1] == '2') {
+    $(document).ready(function(){
+      var id = arr[0];
+        // if($("#state"+id).is(':checked')) {
+        //   $("#state"+id).attr("checked", true);
+        // }
+        // else {
+        //   $("#state"+id).attr("checked", false);
+        // }
+        $("#switch"+id).click();
+    });
+  }
 
 function publish(x) {
   if(!client){
@@ -285,7 +285,7 @@ function publish(x) {
   data: {
     labels: [],
     datasets: [{
-      label: 'Room',
+      label: 'Living Room',
       borderColor: '#17A2B8',
       data: [],
       fill: true,
@@ -330,11 +330,11 @@ function publish(x) {
     data: {
       labels: [],
       datasets: [{
-        label: 'Room',
+        label: 'Living Room',
         borderColor: '#ffc107',
         data: [],
-        fill: false
-        // backgroundColor: '#B3D9E0'
+        fill: true,
+        backgroundColor: '#fcdb03'
       }]
     },
     options: {
