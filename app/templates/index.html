@@ -381,9 +381,16 @@ function publish(x) {
     d = new Date();
     if (chart1.data.datasets.length > 0) {
       chart1.data.labels.push('(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ') ' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
+      setTimeout(Action, 60000);
       chart1.data.datasets.forEach(function(dataset) {
         dataset.data.push(sensorData);
       });
+      function Action() {
+        chart1.data.labels.shift();
+        chart1.data.datasets.forEach(function(dataset) {
+          dataset.data.shift();
+        });
+      }
     window.myLine1.update();
     }
   };
@@ -395,6 +402,13 @@ function publish(x) {
       chart2.data.datasets.forEach(function(dataset) {
         dataset.data.push(sensorData);
       });
+      setTimeout(Action, 60000);
+      function Action() {
+        chart2.data.labels.shift();
+        chart2.data.datasets.forEach(function(dataset) {
+          dataset.data.shift();
+        });
+      }
     window.myLine2.update();
     }
   };
