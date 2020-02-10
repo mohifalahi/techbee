@@ -146,6 +146,7 @@
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
           <div class="card bg-light text-center mt-4">کیفیت هوا</div>
+          <canvas id="airChart"></canvas>
         </div>
       </div>
     </div>
@@ -215,6 +216,7 @@ function onConnect() {
   console.log("onConnect");
   client.subscribe("tempSensor");
   client.subscribe("humSensor");
+  client.subscribe("airQualitySensor");
   client.subscribe("node1");
   alert("Connected.");
 }
@@ -234,10 +236,15 @@ function onMessageArrived(message) {
     var tempData = message.payloadString;
     addTempData(tempData);
   }
-  if (message.destinationName == "humSensor") {
+  else if (message.destinationName == "humSensor") {
     document.getElementById("پذیرایی/حسگر رطوبت").innerHTML = message.payloadString + '%';
     var humData = message.payloadString;
     addHumData(humData);
+  }
+  else if(message.destinationName == "airQualitySensor") {
+    document.getElementById("پذیرایی/حسگر کیفیت هوا").innerHTML = message.payloadString + 'ppm';
+    var airData = message.payloadString;
+    addAirData(airData);
   }
   else if (message.destinationName == "node1") {
     var switchState = message.payloadString;
@@ -370,18 +377,65 @@ function publish(x) {
     }
   };
 
+  var chart3 = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Living Room',
+        borderColor: '#ff6e6e',
+        data: [],
+        fill: true,
+        backgroundColor: '#ffa6a6'
+      }]
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: ''
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Air Quality'
+          }
+        }]
+      }
+    }
+  };
+
   window.onload = function() {
     var ctx1 = document.getElementById('tempChart').getContext('2d');
     window.myLine1 = new Chart(ctx1, chart1);
     var ctx2 = document.getElementById('humChart').getContext('2d');
     window.myLine2 = new Chart(ctx2, chart2);
+    var ctx3 = document.getElementById('airChart').getContext('2d');
+    window.myLine3 = new Chart(ctx3, chart3);
   };
 
   function addTempData(sensorData){
     d = new Date();
     if (chart1.data.datasets.length > 0) {
       chart1.data.labels.push('(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ') ' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
-      setTimeout(Action, 60000);
+      setTimeout(Action, 30000);
       chart1.data.datasets.forEach(function(dataset) {
         dataset.data.push(sensorData);
       });
@@ -402,7 +456,7 @@ function publish(x) {
       chart2.data.datasets.forEach(function(dataset) {
         dataset.data.push(sensorData);
       });
-      setTimeout(Action, 60000);
+      setTimeout(Action, 30000);
       function Action() {
         chart2.data.labels.shift();
         chart2.data.datasets.forEach(function(dataset) {
@@ -410,6 +464,24 @@ function publish(x) {
         });
       }
     window.myLine2.update();
+    }
+  };
+
+  function addAirData(sensorData){
+    d = new Date();
+    if (chart3.data.datasets.length > 0) {
+      chart3.data.labels.push('(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ') ' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
+      chart3.data.datasets.forEach(function(dataset) {
+        dataset.data.push(sensorData);
+      });
+      setTimeout(Action, 360000);
+      function Action() {
+        chart3.data.labels.shift();
+        chart3.data.datasets.forEach(function(dataset) {
+          dataset.data.shift();
+        });
+      }
+    window.myLine3.update();
     }
   };
 
