@@ -81,7 +81,7 @@
 
     <div id="places" class="tabcontent">
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-2">
           <div class="card bg-primary text-white text-center p-2 mb-2">دستگاه جدید</div>
           <form class="text-center" id="device_form" action="{% url 'post' %}" method='POST'>
             {% csrf_token %}
@@ -104,10 +104,10 @@
                 <th><input id="unique_id" class="rounded" type="text" name="unique_id" required></th>
               </tr>
             </table>
-            <input class="btn-dark rounded mt-2" type="submit" name="button" onclick="add_topic(document.getElementById('place').value,document.getElementById('device_type').value,document.getElementById('device').value)" value="افزودن">
+            <input class="btn-danger rounded mt-2" type="submit" name="button" onclick="add_topic(document.getElementById('place').value,document.getElementById('device_type').value,document.getElementById('device').value)" value="افزودن">
           </form>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-2">
           <div class="card bg-success text-white text-center p-2 mb-2">دستگاه‌های موجود</div>
           <div class="col-lg-12 text-center">
             <table>
@@ -218,7 +218,7 @@ function onConnect() {
   client.subscribe("humSensor");
   client.subscribe("airQualitySensor");
   client.subscribe("node1");
-  alert("Connected.");
+  // alert("Connected.");
 }
 
 //Called when the client loses its connection

@@ -215,9 +215,10 @@ th {
   white-space: nowrap;
 }
 
-.btn-dark {
-  width: 100% !important;
+.btn-danger {
+  width: 30% !important;
   line-height: 35px !important;
+  border-radius: 50px !important;
 }
 
 .first-row {
