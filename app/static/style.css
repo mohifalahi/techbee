@@ -215,10 +215,11 @@ th {
   white-space: nowrap;
 }
 
-.btn-danger {
+#btn {
   width: 30% !important;
   line-height: 35px !important;
-  border-radius: 50px !important;
+  border-radius: 25px !important;
+  margin-bottom: 40px !important;
 }
 
 .first-row {
