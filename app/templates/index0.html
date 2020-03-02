@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="An interactive getting started guide for Brackets.">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{%static 'style.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lalezar">
+  <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+    integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+  <title>خانه هوشمند تک بی</title>
+  <script src="{%static 'js/jquery-2.2.4.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script async="" src="{%static 'js/Line%20Chart_files/analytics.js' %}"></script>
+  <script src="{%static 'js/Line%20Chart_files/chart.js' %}"></script>
+  <script src="{%static 'js/Line%20Chart_files/utils.js' %}"></script>
+  <!-- <script type="text/javascript" src="{%static 'js/javascript.js' %}"></script> -->
+  <script src="https://kit.fontawesome.com/5d9e2c6692.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-6">
+          <h1 class="companyName">خانه هوشمند تِک‌بی</h1>
+        </div>
+        <div class="col-md-6 col-sm-6 col-6"><img class="logo" src="{%static 'img/techbee-logo.jpg' %}"></div>
+      </div>
+    </div>
+    <!-- nav links -->
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'dashboard')">داشبورد</button>
+      <button class="tablinks" onclick="openTab(event, 'places')" id="defaultOpen">دستگاه‌ها</button>
+      <button class="tablinks" onclick="openTab(event, 'scenarios')">سناریوها</button>
+      <button class="tablinks" onclick="openTab(event, 'charts')">نمودارها</button>
+    </div>
+    <!-- nav contents -->
+    <div id="dashboard" class="tabcontent">
+      <div class="row">
+        {% for place in places.all %}
+          {% if place.device_type == 'حسگر' %}
+            <div class="col-lg-3 col-md-6 col-sm-12">
+              <div class="box border border-warning">
+                <p class="topic bg-warning border border-warning rounded-top">{{ place.place }} > {{place.device_type}} {{ place.device }}</p>
+                <div class="row">
+                  <i class="col-md-6 col-sm-6 col-6 {{place.icon_class}}" id="icon"></i>
+                  <!-- <p class="col-md-6" id="sensor-text"></p> -->
+                  <p class="col-md-6 col-sm-6 col-6 sensor-data" id='{{place.place}}/{{place.device_type}} {{place.device}}'></p>
+                </div>
+              </div>
+            </div>  
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="row">
+        {% for place in places.all %}
+          {% if place.device_type == 'عملگر' %}
+            <div class="col-lg-3 col-md-3 col-md-6 col-sm-12">
+              <div class="box border border-info">
+                <p class="topic bg-info border border-info rounded-top">{{ place.place }} > {{ place.device }}</p>
+                  <div class="row">
+                    <p class="col-md-6 col-sm-6 col-6" id='{{ place.unique_id }}'>خاموش</p>
+                    <div class="col-md-6 col-sm-6 col-6">
+                      <label id="switch{{ place.unique_id }}" class="switch">
+                        <input id="state{{ place.unique_id }}" type="checkbox" onclick="publish('{{ place.unique_id }}')">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div id="places" class="tabcontent">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 mt-2">
+          <div class="card bg-primary text-white text-center p-2 mb-2">دستگاه جدید</div>
+          <form class="text-center" id="device_form" action="{% url 'post' %}" method='POST'>
+            {% csrf_token %}
+            <table>
+              <tr class="first-row">
+                <th>مکان</th>
+                <th>نوع دستگاه</th>
+                <th>دستگاه</th>
+                <th>شناسه</th>
+              </tr>
+              <tr>
+                <th><input id="place" class="rounded" type="text" name="place" required></th>
+                <th>
+                  <select id="device_type" class="rounded" type="text" name="device_type" required>
+                    <option value="حسگر">حسگر</option>
+                    <option value="عملگر">عملگر</option>
+                  </select>
+                </th>
+                <th><input id="device" class="rounded" type="text" name="device" required></th>
+                <th><input id="unique_id" class="rounded" type="text" name="unique_id" required></th>
+              </tr>
+            </table>
+            <input id="btn" class="btn-danger rounded mt-2" type="submit" name="button" onclick="add_topic(document.getElementById('place').value,document.getElementById('device_type').value,document.getElementById('device').value)" value="افزودن">
+          </form>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 mt-2">
+          <div class="card bg-success text-white text-center p-2 mb-2">دستگاه‌های موجود</div>
+          <div class="col-lg-12 text-center">
+            <table>
+              <tr class="first-row">
+                <th>مکان</th>
+                <th>نوع دستگاه</th>
+                <th>دستگاه</th>
+                <th>شناسه</th>
+              </tr>
+              {% for place in places.all %}
+              <tr>
+                <th>{{ place.place }}</th>
+                <th>{{ place.device_type }}</th>
+                <th>{{ place.device }}</th>
+                <th>{{ place.unique_id }}</th>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="scenarios" class="tabcontent">سناریو</div>
+    <div id="charts" class="tabcontent">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card bg-info text-white text-center">دمای محیط</div>
+          <canvas id="tempChart"></canvas>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card bg-warning text-white text-center mt-4">رطوبت</div>
+          <canvas id="humChart"></canvas>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card bg-danger text-white text-center mt-4">مصرف انرژی</div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card bg-light text-center mt-4">کیفیت هوا</div>
+          <canvas id="airChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript">
+  $(document).on('submit', '#device_form', function(h){
+    h.preventDefault();
+    console.log("Form submitted.");
+    // AJAX form submission function
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'post' %}",
+      data:{
+        place: $('#place').val(),
+        device_type: $('#device_type').val(),
+        device: $('#device').val(),
+        unique_id: $('#unique_id').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      // handle a success response
+      success:function(){
+        console.log("Data added.");
+      }
+    });
+  });
+</script>
+  
+<script>
+document.getElementById("defaultOpen").click();
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+//parameters
+var hostname = "mqtt.eclipse.org";
+var port = 80;
+var ClientID = "ClientID_" + parseInt(Math.random()*100);
+// var HouseID = "House_" + parseInt(Math.random()*1000000);
+
+//Create a client instance
+var client = new Paho.MQTT.Client(hostname, Number(port), ClientID);
+
+//Set callback handlers
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+
+// Connect the client
+client.connect(
+  {onSuccess: onConnect}
+);
+
+//Called when client connects
+function onConnect() {
+  //Once a connection has been established, make a subscription and send a message
+  console.log("onConnect");
+  client.subscribe("DHT001");
+  // client.subscribe("humSensor");
+  client.subscribe("airQualitySensor");
+  client.subscribe("node1");
+  // alert("Connected.");
+}
+
+//Called when the client loses its connection
+function onConnectionLost(responseObject){
+  if(responseObject.errorCode != 0){
+    console.log("onConnectionLost:" + responseObject.errorMessage);
+  }
+}
+
+//Called when a message arrives
+function onMessageArrived(message) {
+  console.log("Message arrived: topic=" + message.destinationName + ", message=" + message.payloadString);
+  if (message.destinationName == "DHT001") {
+    var tempHum = message.payloadString.split("/");
+    if (tempHum[0] == "T") {
+      var temp = parseInt(tempHum[1], 10);
+      document.getElementById("پذیرایی/حسگر دما").innerHTML = temp + '&degC';
+      addTempData(temp);
+    }
+    else {
+      var hum = parseInt(tempHum[1], 10);
+      document.getElementById("پذیرایی/حسگر رطوبت").innerHTML = hum + '%';
+      addHumData(hum);
+    }
+  }
+  /*
+  if (message.destinationName == "tempSensor") {
+    document.getElementById("پذیرایی/حسگر دما").innerHTML = message.payloadString + '&degC';
+    var tempData = message.payloadString;
+    addTempData(tempData);
+  }
+  else if (message.destinationName == "humSensor") {
+    document.getElementById("پذیرایی/حسگر رطوبت").innerHTML = message.payloadString + '%';
+    var humData = message.payloadString;
+    addHumData(humData);
+  }
+  */
+  else if(message.destinationName == "airQualitySensor") {
+    document.getElementById("پذیرایی/حسگر کیفیت هوا").innerHTML = message.payloadString + 'ppm';
+    var airData = message.payloadString;
+    addAirData(airData);
+  }
+  else if (message.destinationName == "node1") {
+    var switchState = message.payloadString;
+  }
+}
+
+var str = switchState;
+  arr = str.split("/");
+  if (arr[1] == '2') {
+    $(document).ready(function(){
+      var id = arr[0];
+        // if($("#state"+id).is(':checked')) {
+        //   $("#state"+id).attr("checked", true);
+        // }
+        // else {
+        //   $("#state"+id).attr("checked", false);
+        // }
+        $("#switch"+id).click();
+    });
+  }
+
+function publish(x) {
+  if(!client){
+    return;
+  }
+  var status = document.getElementById(x);
+  if (status.innerHTML == 'روشن'){
+    status.innerHTML = 'خاموش';
+    status.style.color = "#00B2F6";
+    var message = new Paho.MQTT.Message("0");
+    message.destinationName = "topic1";
+    client.send(message);
+  } else {
+    status.innerHTML = 'روشن';
+    status.style.color = "#ffb80e";
+    var message = new Paho.MQTT.Message("1");
+    message.destinationName = "topic1";
+    client.send(message);
+  }
+}
+</script>
+<script>
+  var chart1 = {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Living Room',
+      borderColor: '#17A2B8',
+      data: [],
+      fill: true,
+      backgroundColor: '#B3D9E0'
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: ''
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: false,
+    },
+    hover: {
+      mode: 'nearest',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Time'
+        }
+      }],
+      yAxes: [{
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Temperature'
+        }
+      }]
+    }
+  }
+};
+
+  var chart2 = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Living Room',
+        borderColor: '#ffc107',
+        data: [],
+        fill: true,
+        backgroundColor: '#fcdb03'
+      }]
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: ''
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Humidity'
+          }
+        }]
+      }
+    }
+  };
+
+  var chart3 = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Living Room',
+        borderColor: '#ff6e6e',
+        data: [],
+        fill: true,
+        backgroundColor: '#ffa6a6'
+      }]
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: ''
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Air Quality'
+          }
+        }]
+      }
+    }
+  };
+
+  window.onload = function() {
+    var ctx1 = document.getElementById('tempChart').getContext('2d');
+    window.myLine1 = new Chart(ctx1, chart1);
+    var ctx2 = document.getElementById('humChart').getContext('2d');
+    window.myLine2 = new Chart(ctx2, chart2);
+    var ctx3 = document.getElementById('airChart').getContext('2d');
+    window.myLine3 = new Chart(ctx3, chart3);
+  };
+
+  function addTempData(sensorData){
+    d = new Date();
+    if (chart1.data.datasets.length > 0) {
+      chart1.data.labels.push('(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ') ' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
+      setTimeout(Action, 30000);
+      chart1.data.datasets.forEach(function(dataset) {
+        dataset.data.push(sensorData);
+      });
+      function Action() {
+        chart1.data.labels.shift();
+        chart1.data.datasets.forEach(function(dataset) {
+          dataset.data.shift();
+        });
+      }
+    window.myLine1.update();
+    }
+  };
+
+  function addHumData(sensorData){
+    d = new Date();
+    if (chart2.data.datasets.length > 0) {
+      chart2.data.labels.push('(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ') ' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
+      chart2.data.datasets.forEach(function(dataset) {
+        dataset.data.push(sensorData);
+      });
+      setTimeout(Action, 30000);
+      function Action() {
+        chart2.data.labels.shift();
+        chart2.data.datasets.forEach(function(dataset) {
+          dataset.data.shift();
+        });
+      }
+    window.myLine2.update();
+    }
+  };
+
+  function addAirData(sensorData){
+    d = new Date();
+    if (chart3.data.datasets.length > 0) {
+      chart3.data.labels.push('(' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ') ' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
+      chart3.data.datasets.forEach(function(dataset) {
+        dataset.data.push(sensorData);
+      });
+      setTimeout(Action, 360000);
+      function Action() {
+        chart3.data.labels.shift();
+        chart3.data.datasets.forEach(function(dataset) {
+          dataset.data.shift();
+        });
+      }
+    window.myLine3.update();
+    }
+  };
+
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+  integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
+  integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</html>

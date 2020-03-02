@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="{%static 'aseests/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{%static 'style/master.css' %}">
     <script src="{%static 'js/javascript.js' %}"></script>
-    <script src="{%static 'js/jquery-2.2.4.min.js' %}"></script>
     <script src="{%static 'aseests/jquery/jquery.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script async="" src="{%static 'js/Line%20Chart_files/analytics.js' %}"></script>
@@ -67,52 +66,7 @@
        
     </header>
     <main>
-      <div id="fake"></div>
-      <div id="cardService">
-        <div class="container">
-          <div class="row justify-content-center">
-          {% for place in places.all %}
-            {% if place.device_type == 'حسگر' %}
-              <div class="col-10 col-md-6 col-lg-4 col-xl-3">
-                <div class="card-deivce mb-4">
-                  <div class="card-device__type">{{ place.place }}</div>
-                  <div class="card-device__name">{{ place.device }}</div>
-                  <div class="card-device__icon">
-                    <i class='{{place.icon_class}}'></i>
-                  </div>
-                  <div class="card-device__num" id='{{place.place}}/{{place.device_type}} {{place.device}}'>
-                    
-                  </div>
-                </div>
-              </div>
-            {% endif %}
-          {% endfor %}
-
-          {% for place in places.all %}
-            {% if place.device_type == 'عملگر' %}
-              <div class="col-10 col-md-6 col-lg-4 col-xl-3">
-                <div class="card-deivce mb-4">
-                  <div class="card-device__type">{{ place.place }}</div>
-                  <div class="card-device__name">{{ place.device }}</div>
-                  <div class="card-device__icon">
-                    <i class='{{place.icon_class}}'></i>
-                  </div>
-                  <div class="card-device__num" id='{{place.place}}/{{place.device_type}} {{place.device}}'>
-                    <label id="switch{{ place.unique_id }}" class="switch">
-                      <input id="state{{ place.unique_id }}" type="checkbox" onclick="publish('{{ place.unique_id }}')">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            {% endif %}
-          {% endfor %}
-          </div>
-        </div>
-      </div>
+        <div id="fake"></div>
     </main>
-    <script src="{%static 'aseests/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{%static 'aseests/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{%static 'aseests/popper/popper.js' %}"></script>
 </body>
 </html>

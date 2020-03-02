@@ -1,0 +1,55 @@
+
+body,html{
+    // background-color: $bg-main;
+    direction: rtl;
+    text-align: right;
+    // color: $text-main;  
+}
+// --------------------------
+// option body
+// ::selection {
+//     color: white;
+//     background: $text-pink;
+//   }
+//   ::-moz-selection {
+//     color: white;
+//     background: $text-pink;
+//   }
+// --------------------------
+.line-height-custom{
+    line-height: 30px;
+}
+ul,li{
+    list-style: none;
+}
+button{
+    border: none;
+    background-color: transparent;
+    &:focus,&:active{
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
+ul{
+    margin-bottom: 0;
+    padding-right: 0;
+}
+a{
+    text-decoration: none;
+    // color: $text-main;
+    &:hover{
+        text-decoration: none;
+        // color: $text-main;
+
+
+    }
+}
+textarea:focus{
+    border: 1px solid #80808059 !important;
+    outline: 0;
+    box-shadow: none !important;
+}
+input:focus{
+    border:1px solid #80808026 !important;
+    box-shadow: none !important;
+}
