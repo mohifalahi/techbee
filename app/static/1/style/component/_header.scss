@@ -1,0 +1,280 @@
+@import '../global/mixin';
+
+.top-header {
+    width: 100%;
+    height: 72px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    background-color: #fff;
+
+    @include md {
+        padding-right: 228px;
+    }
+}
+.logo{
+    width: 175px;
+}
+
+.slider-menu {
+    width: 228px;
+    position: fixed;
+    top: 0;
+    background-color: white;
+    z-index: 1000;
+    height: 100vh;
+    overflow: hidden;
+    right: -100%;
+    .user-icon{
+        font-size: 65px;
+        margin-bottom: -10px;
+    }
+    transition-duration: 0.5s;
+
+    @include md {
+        right: 0%;
+    }
+
+    &.active {
+        right: 0%;
+    }
+
+    .login {
+        width: 102%;
+        height: 265px;
+        background-color: #38ccec;
+        border-radius: 1062px/265px;
+        transform: translate(2px, -0px) rotate(0deg);
+        border-radius: 812px/256px;
+        margin-top: -44px;
+        margin-bottom: 25px;
+        a {
+            display: block;
+
+            margin-top: 65px;
+        }
+    }
+
+    .navigation-menu_mobile {
+        ul {
+            padding: 0 20px;
+
+            li {
+                margin-bottom: 9px;
+                border-radius: 5px;
+                padding: 7px 13px;
+                font-size: 14px;
+                
+
+                &.active {
+                    background: #38ccec2b;
+                }
+
+                &:hover {
+                    background: #38ccec2b;
+                }
+
+                a {
+                    display: block;
+                    color: #666666c4;
+                }
+            }
+        }
+    }
+}
+
+.hamber-icon {
+    width: 29px;
+    height: 24px;
+    z-index: 1100;
+    position: fixed;
+    right: 30px;
+    transition: 0.5s;
+    cursor: pointer;
+
+
+    // transform: translateY(15px);
+    span {
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background-color: gray;
+        transition: 0.5s;
+
+
+        left: 0%;
+
+        &.hamber-icon_top {
+            top: 20%;
+        }
+
+        &.hamber-icon_middle {
+            top: 50%;
+        }
+
+        &.hamber-icon_bottom {
+            top: 80%;
+        }
+
+        &.active {
+            background-color: white;
+            height: 3px;
+        }
+    }
+
+    &.active {
+        span {
+            position: absolute;
+            left: 0%;
+
+
+            &.hamber-icon_top {
+                top: 50%;
+                transform: rotate(45deg);
+            }
+
+            &.hamber-icon_middle {
+                top: 50%;
+                width: 0%;
+            }
+
+            &.hamber-icon_bottom {
+                top: 50%;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+}
+
+main {
+    background-color: #f2f3f5;
+    min-height: 100vh;
+
+    @include md {
+        margin-right: 228px;
+    }
+
+    #fake {
+        height: 72px;
+    }
+
+    #cardService {
+        padding: 20px 0;
+        .card-deivce {
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 4px;
+         
+            .card-device__type,
+            
+            .card-device__name,
+            .card-device__icon,
+            .card-device__num {
+                width: 50%;
+                border: 1px solid #dee2e6;
+                background-color: #fff;
+              
+                color: #666;
+               
+               
+               
+            }
+            .card-device__type,
+            .card-device__name{
+                padding: 27px 3px;
+                border-bottom: 0.5px solid #dee2e6;
+            }
+            .card-device__icon,
+            .card-device__num{
+                padding: 31px 3px;
+                border-top: 0.5px solid #dee2e6;
+            }
+            .card-device__icon{
+                font-size: 27px;
+            }
+        }
+    }
+    #Newdevice{
+        .btn-new-device{
+            background-color: #38ccec;
+            color: #fff;
+            width: 100%;
+            @include md{
+                width: auto;
+            }
+        }
+        .form-new-device{
+            color: #666;
+            font-size: 14px;
+            .input-group-prepend{
+                .input-group-text{
+                    color: #666;
+                    font-size: 14px;
+                }
+              
+            }
+            width: 100%;
+            border: white;
+            background: white;
+            color: red;
+            text-align: right;
+            input{
+                &::placeholder{
+                    font-size: 13px;
+                    color: #bababa;
+                    font-family: IRANSans-l;
+                }
+            }
+            textarea{
+                font-size: 13px;
+                    color: #bababa;
+                    font-family: IRANSans-l;
+            }
+            .btn-send-new-device{
+                background-color: #38ccec;
+                color: white;
+            }
+        }
+    }
+    #showAllDevice{
+        .card-device{
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #fff;
+         color: #666;
+         border-radius: 5px;
+         overflow: hidden;
+        
+         margin-bottom: 10px;
+         border-radius: 5px;
+         font-size: 15px;
+         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.01);
+           .card-icon{
+               background: #80808052;
+               color: white;
+               padding: 2px 20px;
+               font-size: 22px;
+                background: #1f505ac4;
+                background: #72b5b7;
+                
+
+           }
+            .detail{
+                padding: 20px 10px;
+                font-size: 14px;
+                .name{
+
+                }
+                .type{
+
+                }
+            }
+        }
+    }
+
+  
+}

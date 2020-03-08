@@ -1,0 +1,525 @@
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 900;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Black.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Black.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Bold.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Bold.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans_Medium;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Medium.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Medium.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans-l;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Light.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Light.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_UltraLight.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_UltraLight.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_UltraLight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: normal;
+  src: url("../fonts/eot/IRANSansWeb(FaNum).eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum).eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_UltraLight.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum).woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_UltraLight.ttf") format("truetype");
+}
+
+html, body {
+  font-family: IRANSans_Medium  !important;
+  font-weight: 300;
+}
+
+/*
+     ############# Media Query size #############
+*/
+.top-header {
+  width: 100%;
+  height: 72px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  background-color: #fff;
+}
+
+@media (min-width: 768px) {
+  .top-header {
+    padding-right: 228px;
+  }
+}
+
+.logo {
+  width: 175px;
+}
+
+.slider-menu {
+  width: 228px;
+  position: fixed;
+  top: 0;
+  background-color: white;
+  z-index: 1000;
+  height: 100vh;
+  overflow: hidden;
+  right: -100%;
+  -webkit-transition-duration: 0.5s;
+          transition-duration: 0.5s;
+}
+
+.slider-menu .user-icon {
+  font-size: 65px;
+  margin-bottom: -10px;
+}
+
+@media (min-width: 768px) {
+  .slider-menu {
+    right: 0%;
+  }
+}
+
+.slider-menu.active {
+  right: 0%;
+}
+
+.slider-menu .login {
+  width: 102%;
+  height: 265px;
+  background-color: #38ccec;
+  border-radius: 1062px/265px;
+  -webkit-transform: translate(2px, 0px) rotate(0deg);
+          transform: translate(2px, 0px) rotate(0deg);
+  border-radius: 812px/256px;
+  margin-top: -44px;
+  margin-bottom: 25px;
+}
+
+.slider-menu .login a {
+  display: block;
+  margin-top: 65px;
+}
+
+.slider-menu .navigation-menu_mobile ul {
+  padding: 0 20px;
+}
+
+.slider-menu .navigation-menu_mobile ul li {
+  margin-bottom: 9px;
+  border-radius: 5px;
+  padding: 7px 13px;
+  font-size: 14px;
+}
+
+.slider-menu .navigation-menu_mobile ul li.active {
+  background: #38ccec2b;
+}
+
+.slider-menu .navigation-menu_mobile ul li:hover {
+  background: #38ccec2b;
+}
+
+.slider-menu .navigation-menu_mobile ul li a {
+  display: block;
+  color: #666666c4;
+}
+
+.hamber-icon {
+  width: 29px;
+  height: 24px;
+  z-index: 1100;
+  position: fixed;
+  right: 30px;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.hamber-icon span {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background-color: gray;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  left: 0%;
+}
+
+.hamber-icon span.hamber-icon_top {
+  top: 20%;
+}
+
+.hamber-icon span.hamber-icon_middle {
+  top: 50%;
+}
+
+.hamber-icon span.hamber-icon_bottom {
+  top: 80%;
+}
+
+.hamber-icon span.active {
+  background-color: white;
+  height: 3px;
+}
+
+.hamber-icon.active span {
+  position: absolute;
+  left: 0%;
+}
+
+.hamber-icon.active span.hamber-icon_top {
+  top: 50%;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+
+.hamber-icon.active span.hamber-icon_middle {
+  top: 50%;
+  width: 0%;
+}
+
+.hamber-icon.active span.hamber-icon_bottom {
+  top: 50%;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+
+main {
+  background-color: #f2f3f5;
+  min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  main {
+    margin-right: 228px;
+  }
+}
+
+main #fake {
+  height: 72px;
+}
+
+main #cardService {
+  padding: 20px 0;
+}
+
+main #cardService .card-deivce {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+main #cardService .card-deivce .card-device__type,
+main #cardService .card-deivce .card-device__name,
+main #cardService .card-deivce .card-device__icon,
+main #cardService .card-deivce .card-device__num {
+  width: 50%;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  color: #666;
+}
+
+main #cardService .card-deivce .card-device__type,
+main #cardService .card-deivce .card-device__name {
+  padding: 27px 3px;
+  border-bottom: 0.5px solid #dee2e6;
+}
+
+main #cardService .card-deivce .card-device__icon,
+main #cardService .card-deivce .card-device__num {
+  padding: 31px 3px;
+  border-top: 0.5px solid #dee2e6;
+}
+
+main #cardService .card-deivce .card-device__icon {
+  font-size: 27px;
+}
+
+main #Newdevice .btn-new-device {
+  background-color: #38ccec;
+  color: #fff;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  main #Newdevice .btn-new-device {
+    width: auto;
+  }
+}
+
+main #Newdevice .form-new-device {
+  color: #666;
+  font-size: 14px;
+}
+
+main #Newdevice .form-new-device .input-group-prepend .input-group-text {
+  color: #666;
+  font-size: 14px;
+}
+
+main #Newdevice .form-new-device input::-webkit-input-placeholder {
+  font-size: 13px;
+  color: #bababa;
+  font-family: IRANSans-l;
+}
+
+main #Newdevice .form-new-device input:-ms-input-placeholder {
+  font-size: 13px;
+  color: #bababa;
+  font-family: IRANSans-l;
+}
+
+main #Newdevice .form-new-device input::-ms-input-placeholder {
+  font-size: 13px;
+  color: #bababa;
+  font-family: IRANSans-l;
+}
+
+main #Newdevice .form-new-device input::placeholder {
+  font-size: 13px;
+  color: #bababa;
+  font-family: IRANSans-l;
+}
+
+main #Newdevice .form-new-device textarea {
+  font-size: 13px;
+  color: #bababa;
+  font-family: IRANSans-l;
+}
+
+main #Newdevice .form-new-device .btn-send-new-device {
+  background-color: #38ccec;
+  color: white;
+}
+
+main #showAllDevice .card-device {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  background-color: #fff;
+  color: #666;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  /* border-radius: 5px; */
+  font-size: 15px;
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.01);
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.01);
+}
+
+main #showAllDevice .card-device .card-icon {
+  background: #80808052;
+  color: white;
+  padding: 2px 20px;
+  font-size: 22px;
+  background: #1f505ac4;
+  background: #72b5b7;
+}
+
+main #showAllDevice .card-device .detail {
+  padding: 20px 10px;
+  font-size: 14px;
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 900;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Black.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Black.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Black.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Bold.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Bold.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans_Medium;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Medium.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Medium.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans-l;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_Light.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_Light.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_Light.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum)_UltraLight.eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_UltraLight.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum)_UltraLight.woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_UltraLight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: normal;
+  src: url("../fonts/eot/IRANSansWeb(FaNum).eot");
+  src: url("../fonts/eot/IRANSansWeb(FaNum).eot?#iefix") format("embedded-opentype"), url("../fonts/woff2/IRANSansWeb(FaNum)_UltraLight.woff2") format("woff2"), url("../fonts/woff/IRANSansWeb(FaNum).woff") format("woff"), url("../fonts/ttf/IRANSansWeb(FaNum)_UltraLight.ttf") format("truetype");
+}
+
+html, body {
+  font-family: IRANSans_Medium  !important;
+  font-weight: 300;
+}
+
+body, html {
+  direction: rtl;
+  text-align: right;
+}
+
+.line-height-custom {
+  line-height: 30px;
+}
+
+ul, li {
+  list-style: none;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+
+button:focus, button:active {
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+ul {
+  margin-bottom: 0;
+  padding-right: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+textarea:focus {
+  border: 1px solid #80808059 !important;
+  outline: 0;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+input:focus {
+  border: 1px solid #80808026 !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+/*# sourceMappingURL=master.css.map */
+
+.card-device .card-icon #icon {
+  margin-top: 15px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  /* margin: 0 auto; */
+  margin-top: 8px;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+  width: 39px;
+  height: 19px;
+  }
+  
+/* Hide default HTML checkbox */
+.switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+
+/* The slider */
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 15px;
+width: 15px;
+left: 2px;
+bottom: 2px;
+background-color: white;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+input:checked + .slider {
+background-color: #2196F3;
+}
+
+input:focus + .slider {
+box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+-webkit-transform: translateX(26px);
+-ms-transform: translateX(26px);
+transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+border-radius: 50px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+}
