@@ -26,3 +26,7 @@ def submit_form(request):
 
 def chart(request):
     return render(request, 'charts.html')
+
+def scenario(request):
+    places = Place.objects
+    return render(request, 'scenarios.html', {'places':places})

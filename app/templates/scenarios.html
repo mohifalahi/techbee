@@ -1,0 +1,18 @@
+
+{% extends 'index.html' %}
+{% block content %}
+    <div class="col-12 box bg-danger text-center pt-2 pb-2">افزودن سناریو</div>
+    <div class="row">
+        <div class="col-4">
+            <div class="col-12">انتخاب ند</div>
+            <select class="" id="" name="">
+                {% for place in places.all %}
+                    <option value="{{ place.place }}">{{ place.place }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-4">تعیین وضعیت</div>
+        <div class="col-4">تعیین زمان</div>
+    </div>
+{% endblock %}
+    
